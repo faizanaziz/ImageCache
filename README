@@ -1,0 +1,1 @@
+This is a image wrapper for uiimage for iOS. This does caching fot images not in the mainbundle and also provides a convinience function to download and store the image from web.
