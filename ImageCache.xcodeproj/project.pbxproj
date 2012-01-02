@@ -14,6 +14,7 @@
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 		500661CD14A4864200740508 /* BCImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 500661CC14A4864200740508 /* BCImage.m */; };
+		50076E0714ADCB5100836867 /* WeakRefHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 50076E0614ADCB5100836867 /* WeakRefHolder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,8 @@
 		32CA4F630368D1EE00C91783 /* ImageCache_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageCache_Prefix.pch; sourceTree = "<group>"; };
 		500661CB14A4864200740508 /* BCImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BCImage.h; sourceTree = "<group>"; };
 		500661CC14A4864200740508 /* BCImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BCImage.m; sourceTree = "<group>"; };
+		50076E0514ADCB5100836867 /* WeakRefHolder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeakRefHolder.h; sourceTree = "<group>"; };
+		50076E0614ADCB5100836867 /* WeakRefHolder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeakRefHolder.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ImageCache-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ImageCache-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +55,8 @@
 				1D3623250D0F684500981E51 /* ImageCacheAppDelegate.m */,
 				500661CB14A4864200740508 /* BCImage.h */,
 				500661CC14A4864200740508 /* BCImage.m */,
+				50076E0514ADCB5100836867 /* WeakRefHolder.h */,
+				50076E0614ADCB5100836867 /* WeakRefHolder.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -167,6 +172,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* ImageCacheAppDelegate.m in Sources */,
 				500661CD14A4864200740508 /* BCImage.m in Sources */,
+				50076E0714ADCB5100836867 /* WeakRefHolder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

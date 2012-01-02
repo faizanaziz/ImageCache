@@ -9,6 +9,15 @@
 #import <UIKit/UIKit.h>
 #import "BCImage.h"
 
+/*typedef struct CFDictionaryKeyCallBacks {
+	CFIndex version;
+	CFDictionaryRetainCallBack retain;
+	CFDictionaryReleaseCallBack release;
+	CFDictionaryCopyDescriptionCallBack copyDescription;
+	CFDictionaryEqualCallBack equal;
+	CFDictionaryHashCallBack hash;
+}CFDictionaryKeyCallBacks;*/
+
 @interface ImageCacheAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
 	

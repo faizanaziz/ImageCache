@@ -6,11 +6,11 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "WeakRefHolder.h"
 
-
-@interface BCImage : NSObject {
-
+@interface BCImage : UIImage {
+	
 }
 
 + (UIImage*)imageRelativePath:(NSString*)aPath;

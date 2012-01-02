@@ -16,14 +16,17 @@
 #pragma mark -
 #pragma mark Application lifecycle
 
+CFHashCode MyCallBack ( const void *value1 ){
+	NSLog(@"Hello");
+	return 200;
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {    
     
     // Override point for customization after application launch.
     
     [self.window makeKeyAndVisible];
 	
-	
-    
     return YES;
 }
 

@@ -11,20 +11,36 @@
 
 @implementation BCImage
 
-static NSMutableDictionary *imageDictionary;
+static NSMutableArray *imageCacheArray;
 static NSString *commonPath;
 static id observer;
+static WeakRefHolder *refHolder;
 
 + (void)assignDefaults{
-	if( imageDictionary == nil ){
+	if( refHolder == nil )
+		refHolder = [[WeakRefHolder alloc] init];
+	
+	if( imageCacheArray == nil ){
 		observer = [[NSNotificationCenter defaultCenter] addObserverForName:UIApplicationDidReceiveMemoryWarningNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification){
-			[imageDictionary removeAllObjects];
-			[imageDictionary release];
-			imageDictionary = nil;
+			
+			//Free memory
+			[imageCacheArray removeAllObjects];
+			
+			//Clean up
+			[imageCacheArray release];
+			imageCacheArray = nil;
+			
+			[commonPath release];
+			commonPath = nil;
+			
+			if( [[refHolder allKeys] count] == 0 ){
+				[refHolder release];
+				refHolder = nil;
+			}
 			
 			[[NSNotificationCenter defaultCenter] removeObserver:observer];
 		}];
-		imageDictionary = [[NSMutableDictionary alloc] init];
+		imageCacheArray = [[NSMutableArray alloc] init];
 	}
 	
 	if ( commonPath == nil ){
@@ -36,7 +52,8 @@ static id observer;
 + (UIImage*)imageRelativePath:(NSString*)aPath{
 	[BCImage assignDefaults];
 	
-	UIImage *imageForPath = [imageDictionary objectForKey:aPath];
+	//(UIImage*)CFDictionaryGetValue(refHolder, aPath);//[imageDictionary objectForKey:aPath];
+	UIImage *imageForPath = [refHolder objectForKey:aPath];
 	if( imageForPath != nil )
 		return imageForPath;
 	
@@ -44,7 +61,10 @@ static id observer;
 	imageForPath = [[UIImage alloc] initWithContentsOfFile:absolutePath];
 	[absolutePath release];
 	
-	[imageDictionary setObject:imageForPath forKey:aPath];
+	[imageCacheArray addObject:imageForPath];
+	[refHolder setObject:imageForPath forKey:aPath];
+	//CFDictionarySetValue(refHolder, aPath, imageForPath);
+	//[imageDictionary setObject:imageForPath forKey:aPath];
 	[imageForPath release];
 	return imageForPath;
 }
@@ -53,7 +73,7 @@ static id observer;
 	[BCImage assignDefaults];
 	
 	NSString *absolutePath = [[NSString alloc] initWithFormat:@"%@/%@", commonPath, aPath];
-	UIImage *image;
+	BCImage *image = nil;
 	
 	NSAutoreleasePool *autoreleasePool = [[NSAutoreleasePool alloc] init];
 	NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -66,22 +86,32 @@ static id observer;
 		if(imageData != nil ){
 			[imageData writeToFile:absolutePath atomically:YES];
 			image = [[UIImage alloc] initWithData:imageData];
-			[imageDictionary setObject:image forKey:aPath];
+			[imageCacheArray addObject:image];
+			[refHolder setObject:image forKey:aPath];
 			[image release];
 		}
 	}
 	else{
-		image = [imageDictionary objectForKey:aPath];
+		image = [refHolder objectForKey:aPath];
 		if( image == nil ){
-			image = [[UIImage alloc] initWithContentsOfFile:absolutePath];
-			[imageDictionary setObject:image forKey:aPath];
+			image = [[BCImage alloc] initWithContentsOfFile:absolutePath];
+			[imageCacheArray addObject:image];
+			[refHolder setObject:image forKey:aPath];
 			[image release];
 		}
 	}
 	
 	[autoreleasePool drain];
 	[absolutePath release];
+	
 	return image;
+}
+
+- (void)dealloc{
+	NSLog(@"Something got destroyed so unregisterning it from ref holder");
+	[refHolder removeObject:self];
+	
+	[super dealloc];
 }
 
 @end
