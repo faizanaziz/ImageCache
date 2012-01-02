@@ -52,19 +52,20 @@ static WeakRefHolder *refHolder;
 + (UIImage*)imageRelativePath:(NSString*)aPath{
 	[BCImage assignDefaults];
 	
-	//(UIImage*)CFDictionaryGetValue(refHolder, aPath);//[imageDictionary objectForKey:aPath];
-	UIImage *imageForPath = [refHolder objectForKey:aPath];
-	if( imageForPath != nil )
+	BCImage *imageForPath = [refHolder objectForKey:aPath];
+	if( imageForPath != nil ){
+		//If this object is not being cached then it must be cached
+		if( ![imageCacheArray containsObject:imageForPath] )
+			[imageCacheArray addObject:imageForPath];
 		return imageForPath;
+	}
 	
 	NSString *absolutePath = [[NSString alloc] initWithFormat:@"%@/%@", commonPath, aPath];
-	imageForPath = [[UIImage alloc] initWithContentsOfFile:absolutePath];
+	imageForPath = [[BCImage alloc] initWithContentsOfFile:absolutePath];
 	[absolutePath release];
 	
 	[imageCacheArray addObject:imageForPath];
 	[refHolder setObject:imageForPath forKey:aPath];
-	//CFDictionarySetValue(refHolder, aPath, imageForPath);
-	//[imageDictionary setObject:imageForPath forKey:aPath];
 	[imageForPath release];
 	return imageForPath;
 }
@@ -85,7 +86,7 @@ static WeakRefHolder *refHolder;
 		NSData *imageData = [NSURLConnection sendSynchronousRequest:imageRequest returningResponse:&response error:nil];
 		if(imageData != nil ){
 			[imageData writeToFile:absolutePath atomically:YES];
-			image = [[UIImage alloc] initWithData:imageData];
+			image = [[BCImage alloc] initWithData:imageData];
 			[imageCacheArray addObject:image];
 			[refHolder setObject:image forKey:aPath];
 			[image release];
@@ -99,6 +100,12 @@ static WeakRefHolder *refHolder;
 			[refHolder setObject:image forKey:aPath];
 			[image release];
 		}
+		else {
+			//This means that the image was got from the ref holder... If this object is not being cached then it must be cached
+			if( ![imageCacheArray containsObject:image] )
+				[imageCacheArray addObject:image];
+		}
+
 	}
 	
 	[autoreleasePool drain];
